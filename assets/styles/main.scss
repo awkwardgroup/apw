@@ -3,8 +3,7 @@
 @import 'base/base';
 @import 'neat/neat';
 @import 'refills/tables';
-
-@import url(http://fonts.googleapis.com/css?family=Roboto:400,300,500,700);
+@import 'refills/accordion-tabs';
 
 body {
 	padding: 30px 0;
@@ -12,12 +11,87 @@ body {
 
 .container {
 	padding: 0 30px;
+	max-width: 1200px;
+	margin: auto;
+}
+
+.row {
+	@include outer-container;
+	max-width: none;
+
+	.column {
+		@include span-columns(6);
+
+		&:first-child {
+			padding-right: 50px;
+		}
+	}
+}
+
+p {
+	max-width: 650px;
+
+	&.intro {
+		font-size: 1.4em;
+	}
+}
+
+select {
+	margin-bottom: 0.75em;
+}
+
+input {
+	max-width: 550px;
+}
+
+.button {
+	@extend button;
+}
+
+.buttons {
+	margin-top: 30px;
 }
 
 header, section {
-	margin-bottom: 40px;
+	margin-bottom: 20px;
+
+	&.widget {
+		@include clearfix;
+	}
 }
 
-h2 {
+h1, h2, h3 {
 	margin-bottom: 10px;
+}
+
+pre {
+	background: #fff;
+	padding: 10px;
+	overflow: scroll;
+}
+
+
+
+#generated-widget {
+	display: none;
+	padding: 20px;
+	background: #f0f0f0;
+	border: solid 2px #e0e0e0;
+	margin-top: 30px;
+}
+
+.apw-list li {
+	display: block;
+	float: left;
+	width: 25%;
+	line-height: 0.8;
+	padding: 0.2% 0.2% 0 0;
+}
+
+.apw-list img {
+	width: 100%;
+}
+
+.apw-list p {
+	display: none;
 }

@@ -1,65 +1,10 @@
-<?php
-session_start();
-$redirect_uri = 'http://localhost/apw/public/';
-$step = 1;
-
-// Set variables for step 2
-if ( isset( $_GET['step'] ) ) {
-
-	if ( $_GET['step'] == '2' && isset( $_SESSION['data'] ) ) {
-
-		// Set current step
-		$step = 2;
-
-		// Set data from session
-		$data = $_SESSION['data'];
-	}
-}
-
-// Set auth data
-if ( isset( $_GET['client_details'] ) && isset( $_GET['code'] ) ) {
-
-	// Get client details
-	$client_details = split( ':', $_GET['client_details'] );
-	
-	// Set URL
-	$url = 'https://api.instagram.com/oauth/access_token';
-
-	// Query
-	$access_token_parameters = array(
-		'client_id' => $client_details[0],
-		'client_secret' => $client_details[1],
-		'grant_type' => 'authorization_code',
-		'redirect_uri' => $redirect_uri . '?client_details=' . $_GET['client_details'],
-		'code'		=> $_GET['code']
-	);
-
-	// Execute cURL
-	$curl = curl_init( $url );
-	curl_setopt( $curl, CURLOPT_POST, true );
-	curl_setopt( $curl, CURLOPT_POSTFIELDS, $access_token_parameters );
-	curl_setopt( $curl, CURLOPT_RETURNTRANSFER, 1 );
-	curl_setopt( $curl, CURLOPT_SSL_VERIFYPEER, false );
-	$data = json_decode( curl_exec( $curl ) );
-	curl_close( $curl );
-
-	// Save data to session
-	if ( isset( $data->access_token ) ) {
-		
-		$_SESSION['data'] = $data;
-		header( 'Location: ' . $redirect_uri . '?step=2' );
-	}
-	else {
-		header( 'Location: ' . $redirect_uri );
-	}
-}
-?>
+<?php include( 'functions.php' ); ?>
 <!DOCTYPE html>
 <html>
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no" />
-	<title>Awkward Photo Widget</title>
+	<title>Awkward Photo Widget for Instagram</title>
 	<!-- Open Graph (Facebook) -->
 	<!-- https://developers.facebook.com/docs/opengraph/howtos/maximizing-distribution-media-content -->
 	<meta property="og:title" content="" />
@@ -79,50 +24,97 @@ if ( isset( $_GET['client_details'] ) && isset( $_GET['code'] ) ) {
 
 <header>
 	<div class="container">
-		<h1>Awkward Photo Widget for Instagram</h1>
-		<p>This is an easy to use widget for displaying Instagram photos on your website.</p>
+		<h1><a href="<?= $redirect_uri ?>">Awkward Photo Widget for Instagram</a></h1>
+		<p class="intro">This free service makes it easy for developers and designers to display  Instagram photos in any type of application.</p>
 	</div>
 </header>
 
 <section id="main">
 	<div class="container">
+		<!-- STEP 0 (START) -->
+		<?php if ( $step == 0 ) : ?>
+		<p>The service delivers a <u>Widget</u> that can be customized to your preferences. It is embeded in your application as HTML and JavaScript.</p>
+		<p>You can also use the <u>JSON link</u> with JSON data instead of the widget. This is usefull if you're a more exprienced developer and want total control of the front-end structure.</p>
+		<div class="buttons">
+			<a class="button" href="?step=1">Let's get started</a>
+		</div>
+		<!-- STEP 1 (CHOOSE CLIENT) -->
+		<?php elseif ( $step == 1 ) : ?>
 		<section>
-			<h2>Client Details</h2>
-			<p>Either you create your own client <a href="http://instagram.com/developer/clients/manage/" target="_blank">here</a>. Important to use <u><?= $redirect_uri ?></u> as your Redirect URI.</p>
-			<p>Or you can use our client details if you don't want to create your own client:</p>
-			<table class="table-borders">
-				<thead>
-					<tr>
-						<th colspan="2">Awkward Photo Widget</th>
-					</tr>
-				</thead>
-				<tr>
-					<td>Client ID</td>
-					<td>fcb74b7d135b4d5bbe1b713b6d9ae437</td>
-				</tr>
-				<tr>
-					<td>Client Secret</td>
-					<td>cb4ecf2b56e7499a9cb33d735b12b8cf</td>
-				</tr>
-			</table>
+			<h2>1. Choose Client</h2>
+			<p>First you need to choose a client so that the widget can access the Instagram API. We recommend that you create your own client in the <a href="http://instagram.com/developer/clients/manage/" target="_blank">Instagram Developer Panel</a>. It is important that you use <u><?= $redirect_uri ?></u> as Redirect URI.</p>
+			<p>You can also use our default client if you don't want to create your own.</p>
 		</section>
-		<?php if ( $step == 1 ) : ?>
 		<section>
-			<h2>1. Authenticate Widget</h2>
-			<p>Enter client details below to authenticate the widget:</p>
-			<input type="text" id="client-id" placeholder="Client ID" />
-			<input type="text" id="client-secret" placeholder="Client Secret" />
+			<label></label>
+			<select id="client-select">
+				<option value="client-settings-new" selected="selected">I want to use my own client (recommended)</option>
+				<option value="client-settings-default">I want to use the default client</option>
+			</select>
 			<input type="hidden" id="redirect-uri" value="<?= $redirect_uri ?>" />
-			<input type="submit" value="Authenticate" onclick="javascript:apwAuthenticateWidget();">
 		</section>
+		<section>
+			<div class="client-settings" id="client-settings-new">
+				<label>Enter your client details below:</label>
+				<input type="text" id="client-settings-new-id" placeholder="Client ID" />
+				<input type="text" id="client-settings-new-secret" placeholder="Client Secret" />
+			</div>
+			<div class="buttons">
+				<span class="button" onclick="javascript:apwAuthenticateWidget();">Authenticate Client</span>
+			</div>
+		</section>
+		<!-- STEP 2 (GENERATE WIDGET) -->
 		<?php elseif ( $step == 2 ) : ?>
 		<section>
-			<h2>2. Customize Widget</h2>
-			<p>Well this went great <?= $data->user->full_name ?>. You have now succesfully authorized the widget.</p>
-			<p>Your Access Token is: <u><?= $data->access_token ?></u></p>
-			<label>Enter username (for example @<?= $data->user->username ?>) or a hashtag (#awkward)</label>
-			<input type="text" placeholder="User name" />
+			<h2>2. Generate Widget</h2>
+			<p>Your Username is <u><?= $data->user->username ?></u> and your User ID is <u><?= $data->user->id ?></u>.</p>
+			<p>Lookup other User IDs: <a href="http://jelled.com/instagram/lookup-user-id" target="_blank">http://jelled.com/instagram/lookup-user-id</a></p>
 		</section>
+		<section>
+			<!-- WIDGET SETTINGS -->
+			<input type="hidden" id="access-token" value="<?= $data->access_token ?>" />
+			<label>1. Media Type</label>
+			<select id="widget-select">
+				<option value="widget-settings-user">User - Media related to a user</option>
+				<option value="widget-settings-tag">Tag - Media related to a tag</option>
+			</select>
+			<div class="widget-settings" id="widget-settings-user">
+				<label>2. User ID</label>
+				<input type="text" id="widget-settings-user-id" value="<?= $data->user->id ?>" />
+				<label>3. Parameters</label>
+				<input type="text" id="widget-settings-user-parameter" value="count=8" />
+				<p>Read more about user media feeds <a href="http://instagram.com/developer/endpoints/users/" target="_blank">here</a>.</p>
+			</div>
+			<div class="widget-settings" id="widget-settings-tag" style="display: none;">
+				<label>2. Tag</label>
+				<input type="text" id="widget-settings-tag-key" value="awkward" />
+				<label>3. Parameters</label>
+				<input type="text" id="widget-settings-tag-parameter" value="count=8" />
+				<p>Read more about tag media feeds <a href="http://instagram.com/developer/endpoints/tags/" target="_blank">here</a>.</p>
+			</div>
+			<div class="_buttons">
+				<span class="button" onclick="javascript:apwGenerateJSON();">Generate Widget</span>
+			</div>
+		</section>
+		<div id="generated-widget">
+			<section class="widget">
+				<h3>Widget</h3>
+				<ul class="apw-list"></ul>
+			</section>
+			<section>
+				<h3>Embed Code</h3>
+				<p>Copy the code below and paste it into your HTML application.</p>
+				<p>You must use <a href="https://jquery.com/" target="_blank">jQuery</a> for this widget to work.</p>
+				<code>
+					<?php include( 'embed-code.php' ); ?>
+				</code>
+			</section>
+			<section>
+				<h3>JSON Link</h3>
+				<p>Use this link if you want to access the pure JSON data.</p>
+				<textarea id="widget-json-link" rows="4"></textarea>
+			</section>
+		</div>
 		<?php endif; ?>
 	</div>
 </section>
