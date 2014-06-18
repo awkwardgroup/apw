@@ -15,6 +15,9 @@ $( document ).ready( function() {
 		$( '.widget-settings' ).hide();
 		$( '#' + id ).show();
 	});
+
+	// Example widget step 1
+	 apwGenerateWidget( 'https://api.instagram.com/v1/tags/wc2014/media/recent?access_token=7844502.fcb74b7.1ec5839ceb1142e3aea84585a0440cdf&count=8' );
 });
 
 function apwAuthenticateWidget() {
@@ -83,17 +86,21 @@ function apwGenerateWidget( json_link ) {
 		url: json_link
 	});
 
-	// Build list
 	request.done( function( data ) {
 		
 		var items = [];
 
 		jQuery.each( data['data'], function( key, item ) {
 			
+			// Set caption
+			var caption = '';
+			if ( typeof item['caption']['text'] != 'undefined' ) { caption = item['caption']['text']; }
+
+			// Build list item
 			var li = '<li id="image-' + item['id'] + '">';
-			li += '<a href="' + item['link'] + '" target="_blank" title="' + item['caption']['text'] + '">';
-			li += '<img src="' + item['images']['low_resolution']['url'] + '" alt="' + item['caption']['text'] + '" />';
-			li += '<p>' + item['caption']['text'] + '</p>';
+			li += '<a href="' + item['link'] + '" target="_blank" title="' + caption + '">';
+			li += '<img src="' + item['images']['low_resolution']['url'] + '" alt="' + caption + '" />';
+			if ( caption !== '' ) { li += '<p>' + caption + '</p>'; }
 			li += '</a></li>';
 			items.push( li );
 		});
@@ -102,24 +109,3 @@ function apwGenerateWidget( json_link ) {
 		jQuery( '.apw-list' ).append( items.join('') );
 	});
 }
-
-// Tabs
-$(document).ready(function () {
-  $('.accordion-tabs-minimal').each(function(index) {
-    $(this).children('li').first().children('a').addClass('is-active').next().addClass('is-open').show();
-  });
-
-  $('.accordion-tabs-minimal').on('click', 'li > a', function(event) {
-    if (!$(this).hasClass('is-active')) {
-      event.preventDefault();
-      var accordionTabs = $(this).closest('.accordion-tabs-minimal')
-      accordionTabs.find('.is-open').removeClass('is-open').hide();
-
-      $(this).next().toggleClass('is-open').toggle();
-      accordionTabs.find('.is-active').removeClass('is-active');
-      $(this).addClass('is-active');
-    } else {
-      event.preventDefault();
-    }
-  });
-});

@@ -3,7 +3,8 @@
 session_start();
 
 // Define variables
-$redirect_uri = 'http://localhost/apw/public/';
+if ( $_SERVER['HTTP_HOST'] == 'localhost' ) $redirect_uri = 'http://localhost/apw/public/';
+else $redirect_uri = 'https://apw.awkwardgroup.com/';
 $step = 0;
 
 // Set variables for step 2

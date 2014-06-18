@@ -7,13 +7,12 @@
 	<title>Awkward Photo Widget for Instagram</title>
 	<!-- Open Graph (Facebook) -->
 	<!-- https://developers.facebook.com/docs/opengraph/howtos/maximizing-distribution-media-content -->
-	<meta property="og:title" content="" />
-	<meta property="og:site_name" content="" />
-	<meta property="og:url" content="" />
-	<meta property="og:description" content="" />
-	<meta property="og:image" content="" />
-	<meta property="og:type" content="" />
-	<meta property="fb:app_id" content="" />
+	<meta property="og:title" content="Awkward Photo Widget for Instagram" />
+	<meta property="og:site_name" content="Awkward Group" />
+	<meta property="og:url" content="<?= $redirect_uri ?>" />
+	<meta property="og:description" content="A free service that makes it easy for developers and designers to display  Instagram photos in any type of web application." />
+	<meta property="og:image" content="<?= $redirect_uri ?>images/share-facebook.png" />
+	<meta property="og:type" content="website" />
 	<!-- Styles -->
 	<link rel="stylesheet" href="styles/main.min.css" />
 	<!-- Scripts -->
@@ -25,7 +24,8 @@
 <header>
 	<div class="container">
 		<h1><a href="<?= $redirect_uri ?>">Awkward Photo Widget for Instagram</a></h1>
-		<p class="intro">This free service makes it easy for developers and designers to display  Instagram photos in any type of application.</p>
+		<p class="small">Beta Version 0.1 - Last updated 2014-06-18</p>
+		<p class="intro">A free service that makes it easy for developers and designers to display  Instagram photos in any type of web application.</p>
 	</div>
 </header>
 
@@ -33,8 +33,9 @@
 	<div class="container">
 		<!-- STEP 0 (START) -->
 		<?php if ( $step == 0 ) : ?>
-		<p>The service delivers a <u>Widget</u> that can be customized to your preferences. It is embeded in your application as HTML and JavaScript.</p>
-		<p>You can also use the <u>JSON link</u> with JSON data instead of the widget. This is usefull if you're a more exprienced developer and want total control of the front-end structure.</p>
+		<p>The service delivers a <u>Widget</u> that can be embeded in your application as HTML and JavaScript. You can also use the <u>JSON link</u> instead of the widget. This is usefull if you want full control of the front-end structure.</p>
+		<h3>Example Widget</h3>
+		<ul class="apw-list example"></ul>
 		<div class="buttons">
 			<a class="button" href="?step=1">Let's get started</a>
 		</div>
@@ -121,9 +122,18 @@
 
 <footer>
 	<div class="container">
-
+		Developed by <a href="http://www.awkwardgroup.com" target="_blank">Awkward Group</a>. Feel free to follow us on <a href="http://www.facebook.com/awkwardgroup" target="_blank">Facebook</a> or <a href="http://www.twitter.com/awkwardgroup" target="_blank">Twitter</a> :)
 	</div>
 </footer>
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-52095806-1', 'awkwardgroup.com');
+ga('send', 'pageview');
+</script>
 
 </body>
 </html>

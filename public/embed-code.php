@@ -15,17 +15,21 @@ function apwGenerateWidget( json_link ) {
 		url: json_link
 	});
 
-	// Build list
 	request.done( function( data ) {
 		
 		var items = [];
 
 		jQuery.each( data['data'], function( key, item ) {
 			
+			// Set caption
+			var caption = '';
+			if ( typeof item['caption']['text'] != 'undefined' ) { caption = item['caption']['text']; }
+
+			// Build list item
 			var li = '<li id="image-' + item['id'] + '">';
-			li += '<a href="' + item['link'] + '" target="_blank">';
-			li += '<img src="' + item['images']['low_resolution']['url'] + '" alt="' + item['caption']['text'] + '" />';
-			li += '<p>' + item['caption']['text'] + '</p>';
+			li += '<a href="' + item['link'] + '" target="_blank" title="' + caption + '">';
+			li += '<img src="' + item['images']['low_resolution']['url'] + '" alt="' + caption + '" />';
+			if ( caption !== '' ) { li += '<p>' + caption + '</p>'; }
 			li += '</a></li>';
 			items.push( li );
 		});
@@ -52,17 +56,21 @@ jQuery( document ).ready( <span style=' color: Blue;'>function</span>() {
         url: json_link 
     }); 
 
-    <span style=' color: Green;'>// Build list</span> 
     request.done( <span style=' color: Blue;'>function</span>( data ) { 
          
         <span style=' color: Blue;'>var</span> items = []; 
 
         jQuery.each( data[<span style=' color: Maroon;'>'data'</span>], <span style=' color: Blue;'>function</span>( key, item ) { 
              
+            <span style=' color: Green;'>// Set caption</span> 
+            <span style=' color: Blue;'>var</span> caption = <span style=' color: Maroon;'>''</span>;
+            <span style=' color: Blue;'>if</span> ( <span style=' color: Blue;'>typeof</span> item[<span style=' color: Maroon;'>'caption'</span>][<span style=' color: Maroon;'>'text'</span>] != <span style=' color: Maroon;'>'undefined'</span> ) { caption = item[<span style=' color: Maroon;'>'caption'</span>][<span style=' color: Maroon;'>'text'</span>]; } 
+
+            <span style=' color: Green;'>// Build list item</span> 
             <span style=' color: Blue;'>var</span> li = <span style=' color: Maroon;'>'&lt;li id="image-'</span> + item[<span style=' color: Maroon;'>'id'</span>] + <span style=' color: Maroon;'>'"&gt;'</span>;
-            li += <span style=' color: Maroon;'>'&lt;a href="'</span> + item[<span style=' color: Maroon;'>'link'</span>] + <span style=' color: Maroon;'>'" target="_blank"&gt;'</span>;
-            li += <span style=' color: Maroon;'>'&lt;img src="'</span> + item[<span style=' color: Maroon;'>'images'</span>][<span style=' color: Maroon;'>'low_resolution'</span>][<span style=' color: Maroon;'>'url'</span>] + <span style=' color: Maroon;'>'" alt="'</span> + item[<span style=' color: Maroon;'>'caption'</span>][<span style=' color: Maroon;'>'text'</span>] + <span style=' color: Maroon;'>'" /&gt;'</span>; 
-            li += <span style=' color: Maroon;'>'&lt;p&gt;'</span> + item[<span style=' color: Maroon;'>'caption'</span>][<span style=' color: Maroon;'>'text'</span>] + <span style=' color: Maroon;'>'&lt;/p&gt;'</span>;
+            li += <span style=' color: Maroon;'>'&lt;a href="'</span> + item[<span style=' color: Maroon;'>'link'</span>] + <span style=' color: Maroon;'>'" target="_blank" title="'</span> + caption + <span style=' color: Maroon;'>'"&gt;'</span>;
+            li += <span style=' color: Maroon;'>'&lt;img src="'</span> + item[<span style=' color: Maroon;'>'images'</span>][<span style=' color: Maroon;'>'low_resolution'</span>][<span style=' color: Maroon;'>'url'</span>] + <span style=' color: Maroon;'>'" alt="'</span> + caption + <span style=' color: Maroon;'>'" /&gt;'</span>;
+            <span style=' color: Blue;'>if</span> ( caption !== <span style=' color: Maroon;'>''</span> ) { li += <span style=' color: Maroon;'>'&lt;p&gt;'</span> + caption + <span style=' color: Maroon;'>'&lt;/p&gt;'</span>; }
             li += <span style=' color: Maroon;'>'&lt;/a&gt;&lt;/li&gt;'</span>; 
             items.push( li ); 
         }); 
