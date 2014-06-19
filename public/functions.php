@@ -1,10 +1,23 @@
 <?php
+$version = 'Beta Version 0.1.1';
+$updated = '2014-06-19';
+
 // Start session for storing data
 session_start();
 
 // Define variables
-if ( $_SERVER['HTTP_HOST'] == 'localhost' ) $redirect_uri = 'http://localhost/apw/public/';
-else $redirect_uri = 'https://apw.awkwardgroup.com/';
+if ( $_SERVER['HTTP_HOST'] == 'localhost' ) {
+
+	$client_id = '4da3dafe25cf4ee48c7a7a9b967d4009';
+	$client_secret = '4fe4ac3567f64858bdb3ba8971891b7a';
+	$redirect_uri = 'http://localhost/apw/public/';
+}
+else {
+
+	$client_id = 'fcb74b7d135b4d5bbe1b713b6d9ae437';
+	$client_secret = 'cb4ecf2b56e7499a9cb33d735b12b8cf';
+	$redirect_uri = 'https://apw.awkwardgroup.com';
+}
 $step = 0;
 
 // Set variables for step 2

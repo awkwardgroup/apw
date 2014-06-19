@@ -22,17 +22,19 @@ $( document ).ready( function() {
 
 function apwAuthenticateWidget() {
 
-	// Default client details
-	var client_id = 'fcb74b7d135b4d5bbe1b713b6d9ae437';
-	var client_secret = 'cb4ecf2b56e7499a9cb33d735b12b8cf';
-
 	// If user created a new client
 	if ( $( '#client-select' ).val() == 'client-settings-new' ) {
 		
-		client_id = $( '#client-settings-new-id' ).val();
-		client_secret = $( '#client-settings-new-secret' ).val();
+		var client_id = $( '#client-settings-new-id' ).val();
+		var client_secret = $( '#client-settings-new-secret' ).val();
 	}
+	// Default client details
+	else {
 
+		var client_id = $( '#client-settings-default-id' ).val();
+		var client_secret = $( '#client-settings-default-secret' ).val();
+	}
+	
 	// Build redirect URL
 	var redirect_uri = $( '#redirect-uri' ).val() + '?client_details=' + client_id + ':' + client_secret ;
 
@@ -60,9 +62,9 @@ function apwGenerateJSON() {
 
 	$( '#generated-widget' ).fadeIn(500, function() {
 
-		var html = $( 'code' ).html();
+		var html = $( 'code.embed' ).html();
 		html = html.replace( 'INSERT_JSON_LINK', url );
-		$( 'code' ).html( html );
+		$( 'code.embed' ).html( html );
 	});
 
 	var target = $( '#generated-widget' );

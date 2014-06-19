@@ -24,7 +24,7 @@
 <header>
 	<div class="container">
 		<h1><a href="<?= $redirect_uri ?>">Awkward Photo Widget for Instagram</a></h1>
-		<p class="small">Beta Version 0.1 - Last updated 2014-06-18</p>
+		<p class="small"><?= $version ?> - Last updated <?= $updated ?></p>
 		<p class="intro">A free service that makes it easy for developers and designers to display  Instagram photos in any type of web application.</p>
 	</div>
 </header>
@@ -59,6 +59,10 @@
 				<label>Enter your client details below:</label>
 				<input type="text" id="client-settings-new-id" placeholder="Client ID" />
 				<input type="text" id="client-settings-new-secret" placeholder="Client Secret" />
+			</div>
+			<div class="client-settings" id="client-settings-default">
+				<input type="hidden" id="client-settings-default-id" value="<?= $client_id; ?>" />
+				<input type="hidden" id="client-settings-default-secret" value="<?= $client_secret; ?>" />
 			</div>
 			<div class="buttons">
 				<span class="button" onclick="javascript:apwAuthenticateWidget();">Authenticate Client</span>
@@ -104,15 +108,19 @@
 			</section>
 			<section>
 				<h3>Embed Code</h3>
-				<p>Copy the code below and paste it into your HTML application.</p>
 				<p>You must use <a href="https://jquery.com/" target="_blank">jQuery</a> for this widget to work.</p>
-				<code>
+				<p>Copy the code below and paste it into your HTML application.</p>
+				<code class="embed">
 					<?php include( 'embed-code.php' ); ?>
+				</code>
+				<label>Example CSS</label>
+				<code>
+					<?php include( 'embed-css.php' ); ?>
 				</code>
 			</section>
 			<section>
 				<h3>JSON Link</h3>
-				<p>Use this link if you want to access the pure JSON data.</p>
+				<p>Use this link if you want to access the JSON data directly.</p>
 				<textarea id="widget-json-link" rows="4"></textarea>
 			</section>
 		</div>
